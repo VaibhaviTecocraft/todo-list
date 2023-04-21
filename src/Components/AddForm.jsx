@@ -2,11 +2,10 @@ import React, { useEffect, useState } from 'react'
 
 function AddForm() {
     const [personalInfo, setPersonalInfo] = useState(JSON.parse(localStorage.getItem("personalInfo")) || [])
-    const [addInfo, setAddInfo] = useState({})
+    const [addInfo, setAddInfo] = useState({ fname: "", mname: "", lname: "", dateofbirth: "", radio: "", radio: "", contactus: "", email: "", language: "" })
     const [customModal, setCustomModal] = useState('hidden')
     const [sidebar, setsidebar] = useState('hidden')
     const [count, setCount] = useState(JSON.parse(localStorage.getItem("count")) || 0)
-    const [editInfo, seteditInfo] = useState()
 
     const addinfo = (e) => {
         setAddInfo({ ...addInfo, [e.target.name]: e.target.value })
@@ -28,26 +27,46 @@ function AddForm() {
         localStorage.setItem("personalInfo", JSON.stringify(personalInfo))
     }
 
+    // Edit Info
+    const [editInfo, seteditInfo] = useState({ fname: "", mname: "", lname: "", dateofbirth: "", radio: "", radio: "", contactus: "", email: "", language: "" })
     const customModalFun = (id) => {
         setCount(id)
-        localStorage.setItem("personalInfo", JSON.stringify(personalInfo))
+        console.log("id",id);
+        personalInfo.map((item) => {
+            if(item.id === id) {
+                console.log("map id item",item.id);
+                seteditInfo(item.data)
+            }
+        })
         setCustomModal('show')
         setsidebar('show')
     }
+    console.log(editInfo);
+
     const closeFun = () => {
         setCustomModal('hidden')
         setsidebar('hidden')
     }
 
+
     const editinfo = (e) => {
-
         seteditInfo({ ...editInfo, [e.target.name]: e.target.value })
-        console.log(personalInfo);
     }
-
+    console.log("editInfo", editInfo);
     const submitEdit = (e) => {
-       
-        localStorage.setItem("personalInfo", JSON.stringify(personalInfo))
+        console.log();
+        const updateEdits = personalInfo.map((item)=>{
+            if(item.id === count){
+                return {
+                    ...item, 
+                    data : editInfo
+                }
+            }else {
+                return item
+            }
+        })
+        setPersonalInfo(updateEdits)
+        localStorage.setItem("personalInfo", JSON.stringify(updateEdits))
     }
 
     const removeDataFun = (id) => {
@@ -59,7 +78,7 @@ function AddForm() {
 
     useEffect(() => {
         localStorage.setItem("personalInfo", JSON.stringify(personalInfo))
-        seteditInfo(personalInfo[count])
+        // seteditInfo(personalInfo[count])
     }, [count, personalInfo])
 
 
@@ -193,67 +212,58 @@ function AddForm() {
                             </svg>
                         </button>
                     </div>
-                    {
-                        personalInfo.map((items, index) => {
-                            console.log(personalInfo)
-                            if (count === items.id) {
-                                return (
-                                    <div className='pt-6' key={index}>
-                                        <div className="mb-3">
-                                            <label htmlFor="firstName" className="pb-2 text-black block">First Name:</label>
-                                            <input type="text" id="firstName" name="fname" placeholder='Please Enter your name' onChange={editinfo} value={items.data.fname} required="" />
-                                        </div>
-                                        <div className="mb-3">
-                                            <label htmlFor="middleName" className="pb-2 text-black block">Middle Name:</label>
-                                            <input type="text" id="middleName" name="mname" placeholder='Please Enter your middle name' onChange={editinfo} value={items.data.mname} required="" />
-                                        </div>
-                                        <div className="mb-3">
-                                            <label htmlFor="lastName" className="pb-2 text-black block">Last Name:</label>
-                                            <input type="text" id="lastName" name="lname" placeholder='Please Enter your last name' onChange={editinfo} value={items.data.lname} required="" />
-                                        </div>
-                                        <div className="mb-3">
-                                            <label htmlFor="dateofbirth" className="pb-2 text-black block">Date Of Birth:</label>
-                                            <input type="date" id="dateofbirth" name="dateofbirth" required="" onChange={editinfo} value={items.data.dateofbirth} />
-                                        </div>
-                                        <div className="mb-3">
-                                            <label htmlFor="radio" className="pb-2 text-black block">Gender:</label>
-                                            <div className="flex">
-                                                <div className="flex items-center mr-3">
-                                                    <input className="mr-2 w-auto" type="radio" name="radio" required="" value="male" />
-                                                    <label htmlFor="maleRadio" className="text-black block">Male</label>
-                                                </div>
-                                                <div className="flex items-center">
-                                                    <input className="mr-2 w-auto" type="radio" name="radio" required="" value="female" />
-                                                    <label htmlFor="femaleRadio" className="text-black block">Female</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="mb-3">
-                                            <label htmlFor="contactUs" className="pb-2 text-black block">Contact Us:</label>
-                                            <input type="tel" id="contactUs" name="contactus" placeholder='Please Enter your contact number' onChange={editinfo} value={items.data.contactus} required="" />
-                                        </div>
-                                        <div className="mb-3">
-                                            <label htmlFor="email" className="pb-2 text-black block">Email address:</label>
-                                            <input type="email" id="email" aria-describedby="emailHelp" name="email" placeholder='Please Enter your email address' onChange={editinfo} value={items.data.email} required="" />
-                                        </div>
-                                        <div className="mb-3">
-                                            <label htmlFor="language" className="pb-2 text-black block">Language:</label>
-                                            <select className="form-select mb-3 valid" name="language" aria-label="Default select example" id="language" onChange={editinfo} value={items.data.language} required="">
-                                                <option value="language" disabled="">language</option>
-                                                <option value="Hindi">Hindi</option>
-                                                <option value="English">English</option>
-                                                <option value="Gujarati">Gujarati</option>
-                                            </select>
-                                        </div>
-                                        <div className="flex">
-                                            <button type='button' className="theme_btn col-span-2 mx-auto mr-1" onClick={() => { submitEdit(); closeFun(); }}>Update & Close</button>
-                                            <button type='button' className="theme_btn col-span-2 mx-auto ml-1" onClick={() => { closeFun(); }}>Close</button>
-                                        </div>
-                                    </div>
-                                )
-                            }
-                        })
-                    }
+                    <div className='pt-6'>
+                        <div className="mb-3">
+                            <label htmlFor="firstName" className="pb-2 text-black block">First Name:</label>
+                            <input type="text" id="firstName" name="fname" placeholder='Please Enter your name' value={editInfo.fname ? editInfo.fname : ""} onChange={editinfo} required="" />
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="middleName" className="pb-2 text-black block">Middle Name:</label>
+                            <input type="text" id="middleName" name="mname" placeholder='Please Enter your middle name' value={editInfo.mname ? editInfo.mname : ""} onChange={editinfo} required="" />
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="lastName" className="pb-2 text-black block">Last Name:</label>
+                            <input type="text" id="lastName" name="lname" placeholder='Please Enter your last name' value={editInfo.lname ? editInfo.lname : ""} onChange={editinfo} required="" />
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="dateofbirth" className="pb-2 text-black block">Date Of Birth:</label>
+                            <input type="date" id="dateofbirth" name="dateofbirth" value={editInfo.dateofbirth ? editInfo.dateofbirth : ""} onChange={editinfo} required="" />
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="radio" className="pb-2 text-black block">Gender:</label>
+                            <div className="flex">
+                                <div className="flex items-center mr-3">
+                                    <input className="mr-2 w-auto" type="radio" name="radio" onChange={editinfo} id="radio" checked={editInfo.radio === "Male" ? true : false} required="" value="Male" />
+                                    <label htmlFor="maleRadio" className="text-black block">Male</label>
+                                </div>
+                                <div className="flex items-center">
+                                    <input className="mr-2 w-auto" type="radio" name="radio" onChange={editinfo} id="radio" checked={editInfo.radio === "Female" ? true : false} required="" value="Female" />
+                                    <label htmlFor="femaleRadio" className="text-black block">Female</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="contactUs" className="pb-2 text-black block">Contact Us:</label>
+                            <input type="tel" id="contactUs" name="contactus" placeholder='Please Enter your contact number' value={editInfo.contactus ? editInfo.contactus : ""} onChange={editinfo} required="" />
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="email" className="pb-2 text-black block">Email address:</label>
+                            <input type="email" id="email" aria-describedby="emailHelp" name="email" placeholder='Please Enter your email address' value={editInfo.email ? editInfo.email : ""} onChange={editinfo} required="" />
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="language" className="pb-2 text-black block">Language:</label>
+                            <select className="form-select mb-3 valid" name="language" onChange={editinfo} aria-label="Default select example" value={editInfo.language} id="language" required="">
+                                <option value="language" disabled="">language</option>
+                                <option value="Hindi">Hindi</option>
+                                <option value="English">English</option>
+                                <option value="Gujarati">Gujarati</option>
+                            </select>
+                        </div>
+                        <div className="flex">
+                            <button type='button' className="theme_btn col-span-2 mx-auto mr-1" onClick={() => { submitEdit(); closeFun(); }}>Update & Close</button>
+                            <button type='button' className="theme_btn col-span-2 mx-auto ml-1" onClick={() => { closeFun(); }}>Close</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </>

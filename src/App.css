@@ -1,38 +1,56 @@
-.App {
-  text-align: center;
+@font-face {
+    font-family: "Roboto-Bold";
+    src: url("assets/Fonts/Roboto-Bold.eot");
+    src: local("☺"), url("assets/Fonts/Roboto-Bold.woff") format("woff"),
+        url("assets/Fonts/Roboto-Bold.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: "Roboto-Medium";
+    src: url("assets/Fonts/Roboto-Medium.eot");
+    src: local("☺"), url("assets/Fonts/Roboto-Medium.woff") format("woff"),
+        url("assets/Fonts/Roboto-Medium.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+@font-face {
+    font-family: "Roboto-Regular";
+    src: url("assets/Fonts/Roboto-Regular.eot");
+    src: local("☺"), url("assets/Fonts/Roboto-Regular.woff") format("woff"),
+        url("assets/Fonts/Roboto-Regular.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
+.transition {transition: all .5s ease !important }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
 
-.App-link {
-  color: #61dafb;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
+body {@apply lg:text-regular sm:text-small text-xSmall }
+a {@apply font-RobotoMedium}
+p {@apply mb-3 text-grayLight}
+span {@apply text-grayLight}
+label {@apply text-grayLight }
+input , textarea , select {@apply border border-gray-400 focus:border-gray-400 !outline-0 w-full sm:p-[10px_18px] p-[8px_14px] rounded-md leading-none }
+input::placeholder {@apply text-grayLight }
+
+.theme_btn {@apply block w-full bg-primary text-white md:p-4 p-3 rounded-8  border-[1px] border-primary text-center leading-none}
+.theme_btn:hover {@apply bg-white text-primary border-[1px] border-primary}
+
+.data-box .edit-box {@apply opacity-0 transition top-0 right-0} 
+.data-box:hover .edit-box {@apply opacity-100 rounded-[0px_8px] bg-black p-3} 
+.data-box:hover .edit-box svg path {@apply fill-white} 
+.overlay {@apply fixed left-0 top-0 z-0 h-full w-full bg-[#000000bf] transition}
+
+.custom-modal {@apply fixed top-0 left-0 w-full h-full z-10 invisible delay-500 opacity-0}
+.custom-modal.show {@apply fixed top-0 left-0 w-full h-full z-10 delay-0 visible opacity-100}
+.right-sidebar {@apply absolute top-0 right-0 bottom-0 translate-x-full max-w-[400px] bg-white w-full transition}
+.right-sidebar.show {@apply  translate-x-0 transition }
+
+
+
